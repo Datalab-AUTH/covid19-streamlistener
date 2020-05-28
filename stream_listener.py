@@ -6,6 +6,7 @@ import pymongo
 from pymongo import MongoClient
 import datetime
 import sys
+import os
 
 mongoURL = os.environ['MONGOURL']
 mongoDB = os.environ['MONGODB']
