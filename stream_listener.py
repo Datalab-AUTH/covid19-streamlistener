@@ -8,6 +8,10 @@ import datetime
 import sys
 import os
 
+# always flush the output immediately
+import functools
+print = functools.partial(print, flush=True)
+
 mongoURL = os.environ['MONGOURL']
 mongoDB = os.environ['MONGODB']
 mongoCollection = os.environ['MONGOCOLLECTION']
