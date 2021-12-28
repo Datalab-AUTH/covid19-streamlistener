@@ -69,7 +69,8 @@ class StreamListener(tweepy.Stream):
             datajson['created_at'] = dt
             coll.insert(datajson)
         except Exception as e:
-           print(e)
+            print("Caught Exception:")
+            print(e)
 
 def start_stream():
     while True:
@@ -81,6 +82,7 @@ def start_stream():
             print("Tracking: " + str(WORDS))
             stream.filter(track = WORDS)
         except Exception as e:
+            print("Caught Exception:")
             print(e)
             time.sleep(1)
             continue
