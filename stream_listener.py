@@ -67,7 +67,7 @@ class StreamListener(tweepy.Stream):
             dt = datetime.datetime.strptime(created_at,
                     '%a %b %d %H:%M:%S +0000 %Y')
             datajson['created_at'] = dt
-            coll.insert(datajson)
+            coll.insert_one(datajson)
         except Exception as e:
             print("Caught Exception:")
             print(e)
