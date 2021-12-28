@@ -7,6 +7,7 @@ from pymongo import MongoClient
 import datetime
 import sys
 import os
+import time
 
 # always flush the output immediately
 import functools
@@ -41,14 +42,14 @@ WORDS = ['#κορωνοιος',
         '#απαγορευση_κυκλοφοριας',
         '#απαγορευσηκυκλοφοριας']
 
-class StreamListener(tweepy.StreamListener):
+class StreamListener(tweepy.Stream):
     #This is a class provided by tweepy to access the Twitter Streaming API.
 
     def on_connect(self):
         # Called initially to connect to the Streaming API
         print("You are now connected to the streaming API.")
 
-    def on_error(self, status_code):
+    def on_request_error(self, status_code):
         # On error - if an error occurs, display the error / status code
         print('An Error has occured: ' + repr(status_code),
                 file=sys.stderr)
@@ -73,18 +74,27 @@ class StreamListener(tweepy.StreamListener):
 def start_stream():
     while True:
         try:
-            auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-            auth.set_access_token(access_key, access_secret)
-            # Set up the listener. The 'wait_on_rate_limit=True' is needed
-            # to help with Twitter API rate limiting.
-            listener = StreamListener(api = tweepy.API(
-                                            wait_on_rate_limit = True,
-                                            wait_on_rate_limit_notify = True,
-                                            compression = True))
-            streamer = tweepy.Stream(auth = auth, listener = listener)
+            stream = StreamListener(
+                    consumer_key, consumer_secret,
+                    access_key, access_secret
+            )
             print("Tracking: " + str(WORDS))
-            streamer.filter(track = WORDS)
-        except:
+            stream.filter(track = WORDS)
+
+            #auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+            #auth.set_access_token(access_key, access_secret)
+            ## Set up the listener. The 'wait_on_rate_limit=True' is needed
+            ## to help with Twitter API rate limiting.
+            #listener = StreamListener(api = tweepy.API(
+            #                                wait_on_rate_limit = True,
+            #                                wait_on_rate_limit_notify = True,
+            #                                compression = True))
+            #streamer = tweepy.Stream(auth = auth, listener = listener)
+            #print("Tracking: " + str(WORDS))
+            #streamer.filter(track = WORDS)
+        except Exception as e:
+            print(e)
+            time.sleep(1)
             continue
 
 if __name__ == "__main__":
